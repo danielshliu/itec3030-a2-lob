@@ -13,7 +13,7 @@ public class TradingAgentFactory extends  AbstractTradingAgentFactory{
     public TradingAgent createAgent(String type, String style, Trader t, StockExchange exc, NewsBoard n){
         ITradingStrategy strategy;
 
-        if(style.equalsIgnoreCase("Agressive")) {
+        if(style.equalsIgnoreCase("Aggressive")) {
             strategy = new TradingStrategyAggressive(t,exc);
         }else if(style.equalsIgnoreCase("Conservative")){
             strategy = new TradingStrategyConservative(t,exc);
