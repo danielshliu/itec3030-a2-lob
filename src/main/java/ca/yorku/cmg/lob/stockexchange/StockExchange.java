@@ -15,8 +15,6 @@ import ca.yorku.cmg.lob.security.Security;
 import ca.yorku.cmg.lob.security.SecurityList;
 import ca.yorku.cmg.lob.stockexchange.events.NewsBoard;
 import ca.yorku.cmg.lob.stockexchange.tradingagent.TradingAgent;
-import ca.yorku.cmg.lob.stockexchange.tradingagent.TradingStrategyAggressive;
-import ca.yorku.cmg.lob.stockexchange.tradingagent.TradingStrategyConservative;
 import ca.yorku.cmg.lob.stockexchange.tradingagent.TradingAgentFactory;
 import ca.yorku.cmg.lob.trader.Trader;
 import ca.yorku.cmg.lob.trader.TraderInstitutional;
