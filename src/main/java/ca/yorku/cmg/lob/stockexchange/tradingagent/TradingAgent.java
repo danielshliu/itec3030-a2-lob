@@ -12,6 +12,7 @@ public abstract class TradingAgent {
 	protected Trader t;
 	protected StockExchange exc;
 	protected NewsBoard news;
+	protected ITradingStrategy strat;
 	
 	/**
 	 * Constructor
@@ -19,10 +20,11 @@ public abstract class TradingAgent {
 	 * @param e The {@linkplain StockExchange} object at which the agent has an account and trades in. 
 	 * @param n The {@linkplain NewsBoard} object that generates news events.
 	 */
-	public TradingAgent(Trader t, StockExchange e, NewsBoard n) {
+	public TradingAgent(Trader t, StockExchange e, NewsBoard n, ITradingStrategy s) {
 		this.t=t;
 		this.exc = e;
 		this.news = n;
+		this.strat = s;
 	}
 	
 	/**
@@ -40,7 +42,7 @@ public abstract class TradingAgent {
 	private void examineEvent(Event e) {
 		int positionInSecurity = exc.getAccounts().getTraderAccount(t).getPosition(e.getSecrity().getTicker());
 		if (positionInSecurity > 0) {
-			actOnEvent(e,positionInSecurity,exc.getPrice(e.getSecrity().getTicker()));
+			strat.actOnEvent(e,positionInSecurity,exc.getPrice(e.getSecrity().getTicker()));
 		}
 	}
 
@@ -59,12 +61,14 @@ public abstract class TradingAgent {
 	
 	
 	/**
+	 * Don't need this since using Strategy Pattern.
+	 *
 	 * Act in response to a news {@linkplain Event}. Exact reaction strategy to be implemented by specialized agents.
 	 * @param e The {@linkplain Event} in question
 	 * @param pos The position (number of units) of the trader to the ticker that is mentioned in the Event.
 	 * @param price The current price of the relevant ticker. 
 	 */
-	protected abstract void actOnEvent(Event e, int pos, int price);
+//	protected abstract void actOnEvent(Event e, int pos, int price);
 	
 	
 	
