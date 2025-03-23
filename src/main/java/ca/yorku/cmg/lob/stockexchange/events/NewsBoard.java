@@ -4,27 +4,51 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
 
 import ca.yorku.cmg.lob.security.Security;
 import ca.yorku.cmg.lob.security.SecurityList;
+import ca.yorku.cmg.lob.stockexchange.tradingagent.INewsObserver;
 
 /**
  * A NewsBoard object generates and shares financial/economic events that affect specific securities 
  */
-public class NewsBoard {
+public class NewsBoard implements NewsBoardSubject{
 
 	//Events are queued ordered by time
 	PriorityQueue<Event> eventQueue = new PriorityQueue<>((e1, e2) -> Long.compare(e1.getTime(), e2.getTime()));
 
 	SecurityList securities;
-	
+	ArrayList<INewsObserver> observers;
+
+
 	public NewsBoard(SecurityList x) {
 		this.securities = x;
+		observers = new ArrayList<INewsObserver>();
 	}
-	
+
+	@Override
+	public void registerObserver(INewsObserver o) {
+		observers.add(o);
+	}
+
+	@Override
+	public void removeObserver(INewsObserver o) {
+		observers.remove(o);
+	}
+
+	@Override
+	public void notifyObservers(Event e) {
+		for(INewsObserver observer: observers){
+			observer.update(e);
+		}
+	}
+
+
+
     // Allowed event values
     private static final Set<String> VALID_EVENTS = new HashSet<>(
 	        Arrays.asList("Good", "Bad")
@@ -116,9 +140,12 @@ public class NewsBoard {
 	 * Stub for the observer part. Runs the entire queue of events and sends notifications to registered trading agents.   
 	 */
 	public void runEventsList() {
-
+		while (!eventQueue.isEmpty()){
+			Event e = eventQueue.poll();
+			notifyObservers(e);
+		}
 	}
-	
-	
-	
+
+
+
 }

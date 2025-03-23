@@ -3,12 +3,13 @@ package ca.yorku.cmg.lob.stockexchange.tradingagent;
 import ca.yorku.cmg.lob.stockexchange.StockExchange;
 import ca.yorku.cmg.lob.stockexchange.events.Event;
 import ca.yorku.cmg.lob.stockexchange.events.NewsBoard;
+import ca.yorku.cmg.lob.stockexchange.events.NewsBoardSubject;
 import ca.yorku.cmg.lob.trader.Trader;
 
 /**
  * An trading agent that receives news and reacts by submitting ask or bid orders.
  */
-public abstract class TradingAgent {
+public abstract class TradingAgent implements INewsObserver {
 	protected Trader t;
 	protected StockExchange exc;
 	protected NewsBoard news;
@@ -25,8 +26,13 @@ public abstract class TradingAgent {
 		this.exc = e;
 		this.news = n;
 		this.strat = s;
+		this.news.registerObserver(this);
 	}
-	
+
+	@Override
+	public void update(Event e){
+		examineEvent(e);
+	}
 	/**
 	 * Method to be called as time advances to {@code time}. In response the TradingAgent will poll the NewsBoard for events.
 	 * @param time The time to advance to.
